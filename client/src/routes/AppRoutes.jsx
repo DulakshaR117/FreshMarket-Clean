@@ -13,6 +13,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import Categories from "../pages/Categories";
+import Contact from "../pages/Contact";
 
 function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ function AppRoutes() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/categories" element={<Categories />} />
+<Route path="/contact" element={<Contact />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

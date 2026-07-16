@@ -4,66 +4,9 @@ import SearchBar from "../components/products/SearchBar";
 import CategoryFilter from "../components/products/CategoryFilter";
 import SortDropdown from "../components/products/SortDropdown";
 import ProductCard from "../components/products/ProductCard";
+import products from "../data/products";
 
 
-const products = [
-  {
-    id: 1,
-    name: "Fresh Carrots",
-    category: "Vegetables",
-    price: 350,
-    image: "🥕",
-  },
-  {
-    id: 2,
-    name: "Red Apples",
-    category: "Fruits",
-    price: 680,
-    image: "🍎",
-  },
-  {
-    id: 3,
-    name: "Fresh Milk",
-    category: "Dairy",
-    price: 450,
-    image: "🥛",
-  },
-  {
-    id: 4,
-    name: "Broccoli",
-    category: "Vegetables",
-    price: 550,
-    image: "🥦",
-  },
-  {
-    id: 5,
-    name: "Chicken Breast",
-    category: "Meat",
-    price: 1200,
-    image: "🍗",
-  },
-  {
-    id: 6,
-    name: "Bread",
-    category: "Bakery",
-    price: 220,
-    image: "🍞",
-  },
-  {
-    id: 7,
-    name: "Orange Juice",
-    category: "Drinks",
-    price: 480,
-    image: "🧃",
-  },
-  {
-    id: 8,
-    name: "Bananas",
-    category: "Fruits",
-    price: 280,
-    image: "🍌",
-  },
-];
 
 function Products() {
   const [searchParams] = useSearchParams();

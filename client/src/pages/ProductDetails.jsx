@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import products from "../data/products";
 import { FiArrowLeft } from "react-icons/fi";
 import ProductTabs from "../components/products/ProductTabs";
 import RelatedProducts from "../components/products/RelatedProducts";
@@ -7,6 +8,11 @@ import ProductImage from "../components/products/ProductImage";
 import ProductDetailsInfo from "../components/products/ProductDetailsInfo";
 
 function ProductDetails() {
+  const { id } = useParams();
+
+  const product = products.find(
+    (item) => item.id === Number(id)
+  );
   return (
     <>
       <section className="bg-gray-50 py-16">
@@ -25,9 +31,9 @@ function ProductDetails() {
 
           <div className="grid lg:grid-cols-2 gap-20 items-center">
 
-            <ProductImage />
+            <ProductImage product={product} />
 
-            <ProductDetailsInfo />
+            <ProductDetailsInfo product={product} />
 
           </div>
 
