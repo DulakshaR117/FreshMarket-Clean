@@ -1,6 +1,8 @@
 import { FiStar, FiShoppingCart } from "react-icons/fi";
+import { useCart } from "../../contexts/CartContext";
 
 function ProductDetailsInfo({ product }) {
+  const { addToCart } = useCart();
   if (!product) {
     return (
       <div>
@@ -67,10 +69,14 @@ function ProductDetailsInfo({ product }) {
         </button>
       </div>
 
-      <button className="mt-10 bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-xl flex items-center gap-3 transition">
-        <FiShoppingCart />
-        Add To Cart
-      </button>
+     <button
+  onClick={() => addToCart(product)}
+  disabled={!product.stock}
+  className="mt-10 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-10 py-4 rounded-xl flex items-center gap-3 transition"
+>
+  <FiShoppingCart />
+  Add To Cart
+</button>
     </div>
   );
 }

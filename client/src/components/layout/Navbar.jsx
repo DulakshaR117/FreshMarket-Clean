@@ -8,9 +8,11 @@ import {
 } from "react-icons/fi";
 
 import { useState } from "react";
+import { useCart } from "../../contexts/CartContext";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { cartCount } = useCart();
 
   const navLinkClass = ({ isActive }) =>
     `font-medium transition ${
@@ -72,9 +74,11 @@ function Navbar() {
           >
             <FiShoppingCart size={24} />
 
-            <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              0
-            </span>
+           {cartCount > 0 && (
+  <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+    {cartCount}
+  </span>
+)}
           </Link>
 
           {/* Login */}
