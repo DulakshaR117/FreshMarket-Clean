@@ -10,9 +10,12 @@ function Products() {
   const [searchParams] = useSearchParams();
 
   const selectedCategory = searchParams.get("category");
+  
   const searchTerm = searchParams.get("search")?.toLowerCase() || "";
+const sortBy = searchParams.get("sort") || "";
 
-  const filteredProducts = products.filter((product) => {
+const filteredProducts = products
+  .filter((product) => {
     const matchesCategory =
       !selectedCategory || product.category === selectedCategory;
 
@@ -20,6 +23,24 @@ function Products() {
       product.name.toLowerCase().includes(searchTerm);
 
     return matchesCategory && matchesSearch;
+  })
+  .sort((a, b) => {
+    switch (sortBy) {
+      case "price-low":
+        return a.price - b.price;
+
+      case "price-high":
+        return b.price - a.price;
+
+      case "name-asc":
+        return a.name.localeCompare(b.name);
+
+      case "name-desc":
+        return b.name.localeCompare(a.name);
+
+      default:
+        return 0;
+    }
   });
 
   return (
