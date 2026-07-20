@@ -1,4 +1,4 @@
-import DashboardCard from "../../components/layout/admin/DashboardCard";
+import DashboardCard from "../../components/admin/DashboardCard";
 
 function AdminDashboard() {
   return (

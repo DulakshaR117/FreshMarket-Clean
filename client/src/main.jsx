@@ -4,6 +4,7 @@ import App from "./App";
 import "./index.css";
 
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
@@ -18,6 +19,19 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <WishlistProvider>
             <CartProvider>
               <App />
+
+              <Toaster
+                position="top-right"
+                reverseOrder={false}
+                toastOptions={{
+                  duration: 3000,
+                  style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#fff",
+                  },
+                }}
+              />
             </CartProvider>
           </WishlistProvider>
         </OrderProvider>
