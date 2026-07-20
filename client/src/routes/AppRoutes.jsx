@@ -1,8 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
-import ProtectedRoute from "../components/auth/ProtectedRoute";
+// Layouts
 import MainLayout from "../layouts/MainLayout";
+import AdminLayout from "../layouts/AdminLayout";
 
+// Protected Route
+import ProtectedRoute from "../components/auth/ProtectedRoute";
+
+// Customer Pages
 import Home from "../pages/Home";
 import Products from "../pages/Products";
 import ProductDetails from "../pages/ProductDetails";
@@ -20,18 +25,52 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 
+// Admin Pages
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminProducts from "../pages/admin/AdminProducts";
+import AdminCategories from "../pages/admin/AdminCategories";
+import AdminOrders from "../pages/admin/AdminOrders";
+import AdminCustomers from "../pages/admin/AdminCustomers";
+import AdminAnalytics from "../pages/admin/AdminAnalytics";
+
 function AppRoutes() {
   return (
     <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/contact" element={<Contact />} />
 
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/wishlist" element={<Wishlist />} />
+      {/* ==========================
+          Customer Routes
+      ========================== */}
+
+      <Route element={<MainLayout />}>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/products" element={<Products />} />
+
+        <Route
+          path="/products/:id"
+          element={<ProductDetails />}
+        />
+
+        <Route
+          path="/categories"
+          element={<Categories />}
+        />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
+
+        <Route
+          path="/wishlist"
+          element={<Wishlist />}
+        />
 
         <Route
           path="/checkout"
@@ -68,12 +107,75 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
       </Route>
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      {/* ==========================
+          Authentication
+      ========================== */}
 
-      <Route path="*" element={<NotFound />} />
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      <Route
+        path="/register"
+        element={<Register />}
+      />
+
+      {/* ==========================
+          Admin Routes
+      ========================== */}
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          index
+          element={<AdminDashboard />}
+        />
+
+        <Route
+          path="products"
+          element={<AdminProducts />}
+        />
+
+        <Route
+          path="categories"
+          element={<AdminCategories />}
+        />
+
+        <Route
+          path="orders"
+          element={<AdminOrders />}
+        />
+
+        <Route
+          path="customers"
+          element={<AdminCustomers />}
+        />
+
+        <Route
+          path="analytics"
+          element={<AdminAnalytics />}
+        />
+      </Route>
+
+      {/* ==========================
+          404
+      ========================== */}
+
+      <Route
+        path="*"
+        element={<NotFound />}
+      />
+
     </Routes>
   );
 }
