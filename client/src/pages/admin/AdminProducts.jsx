@@ -1,5 +1,5 @@
 import { FiPlus } from "react-icons/fi";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import SearchBar from "../../components/admin/SearchBar";
@@ -7,37 +7,89 @@ import ProductTable from "../../components/admin/ProductTable";
 import ProductModal from "../../components/admin/ProductModal";
 import DeleteDialog from "../../components/admin/DeleteDialog";
 
-import adminProducts from "../../data/adminProducts";
+import productService from "../../api/productService";
+import categoryService from "../../api/categoryService";
 
 function AdminProducts() {
-  const [products, setProducts] = useState(adminProducts);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
   const [search, setSearch] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteProduct, setDeleteProduct] = useState(null);
 
+  const [loading, setLoading] = useState(true);
+
+  // ==========================
+  // Load Products
+  // ==========================
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+
+      const data = await productService.getAll();
+
+      setProducts(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ==========================
+  // Load Categories
+  // ==========================
+  const loadCategories = async () => {
+    try {
+      const data = await categoryService.getAll();
+
+      setCategories(data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load categories");
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+    loadCategories();
+  }, []);
+
+  // ==========================
+  // Search
+  // ==========================
   const filteredProducts = useMemo(() => {
-    return products.filter((product) =>
-      product.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const keyword = search.toLowerCase();
+
+    return products.filter((product) => {
+      return (
+        product.name?.toLowerCase().includes(keyword) ||
+        product.description?.toLowerCase().includes(keyword) ||
+        product.categoryName?.toLowerCase().includes(keyword)
+      );
+    });
   }, [products, search]);
 
   // ==========================
   // Add Product
   // ==========================
-  const handleAddProduct = (newProduct) => {
-    const product = {
-      id: Date.now(),
-      status: "Active",
-      image: "https://via.placeholder.com/60",
-      ...newProduct,
-    };
+  const handleAddProduct = async (newProduct) => {
+    try {
+      await productService.create(newProduct);
 
-    setProducts((prevProducts) => [...prevProducts, product]);
+      await loadProducts();
 
-    setIsModalOpen(false);
+      setIsModalOpen(false);
 
-    toast.success("Product added successfully!");
+      toast.success("Product added successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add product");
+    }
   };
 
   // ==========================
@@ -51,57 +103,59 @@ function AdminProducts() {
   // ==========================
   // Update Product
   // ==========================
-  const handleUpdateProduct = (updatedProduct) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === selectedProduct.id
-          ? {
-              ...product,
-              ...updatedProduct,
-            }
-          : product
-      )
-    );
+  const handleUpdateProduct = async (updatedProduct) => {
+    try {
+      await productService.update(selectedProduct.id, updatedProduct);
 
-    setSelectedProduct(null);
-    setIsModalOpen(false);
+      await loadProducts();
 
-    toast.success("Product updated successfully!");
+      setSelectedProduct(null);
+      setIsModalOpen(false);
+
+      toast.success("Product updated successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update product");
+    }
   };
 
   // ==========================
-  // Delete Product
+  // Delete Dialog
   // ==========================
   const handleDeleteClick = (product) => {
     setDeleteProduct(product);
   };
 
-  const handleDeleteProduct = () => {
-    setProducts((prevProducts) =>
-      prevProducts.filter(
-        (product) => product.id !== deleteProduct.id
-      )
-    );
+  // ==========================
+  // Delete Product
+  // ==========================
+  const handleDeleteProduct = async () => {
+    try {
+      await productService.delete(deleteProduct.id);
 
-    setDeleteProduct(null);
+      await loadProducts();
 
-    toast.success("Product deleted successfully!");
+      setDeleteProduct(null);
+
+      toast.success("Product deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete product");
+    }
   };
 
   return (
     <div>
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">
-          Products
-        </h1>
+        <h1 className="text-4xl font-bold">Products</h1>
 
         <button
           onClick={() => {
             setSelectedProduct(null);
             setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg transition-all duration-200 hover:scale-105"
+          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg"
         >
           <FiPlus />
           Add Product
@@ -116,14 +170,20 @@ function AdminProducts() {
         />
       </div>
 
-      {/* Products Table */}
-      <ProductTable
-        products={filteredProducts}
-        onEdit={handleEditProduct}
-        onDelete={handleDeleteClick}
-      />
+      {/* Product Table */}
+      {loading ? (
+        <div className="bg-white rounded-lg shadow p-8 text-center">
+          Loading products...
+        </div>
+      ) : (
+        <ProductTable
+          products={filteredProducts}
+          onEdit={handleEditProduct}
+          onDelete={handleDeleteClick}
+        />
+      )}
 
-      {/* Add / Edit Modal */}
+      {/* Product Modal */}
       <ProductModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -132,6 +192,7 @@ function AdminProducts() {
         }}
         mode={selectedProduct ? "edit" : "add"}
         product={selectedProduct}
+        categories={categories}
         onSave={
           selectedProduct
             ? handleUpdateProduct
@@ -139,7 +200,7 @@ function AdminProducts() {
         }
       />
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Dialog */}
       <DeleteDialog
         isOpen={!!deleteProduct}
         product={deleteProduct}

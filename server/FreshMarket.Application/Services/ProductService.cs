@@ -27,7 +27,7 @@ public class ProductService : IProductService
             Name = p.Name,
             Description = p.Description,
             Price = p.Price,
-            //StockQuantity = p.StockQuantity,
+            StockQuantity = p.StockQuantity,
             CategoryId = p.CategoryId,
             CategoryName = p.Category.Name
         }).ToList();
@@ -46,7 +46,7 @@ public class ProductService : IProductService
         Name = product.Name,
         Description = product.Description,
         Price = product.Price,
-        // product.StockQuantity,
+        StockQuantity = product.StockQuantity,
         CategoryId = product.CategoryId,
         CategoryName = product.Category.Name
     };
@@ -69,7 +69,7 @@ public class ProductService : IProductService
             Name = request.Name,
             Description = request.Description,
             Price = request.Price,
-           // StockQuantity = request.StockQuantity,
+           StockQuantity = request.StockQuantity,
             CategoryId = request.CategoryId
         };
 
@@ -94,7 +94,7 @@ public class ProductService : IProductService
         product.Name = request.Name;
         product.Description = request.Description;
         product.Price = request.Price;
-        //product.StockQuantity = request.StockQuantity;
+        product.StockQuantity = request.StockQuantity;
         product.CategoryId = request.CategoryId;
 
         _productRepository.Update(product);

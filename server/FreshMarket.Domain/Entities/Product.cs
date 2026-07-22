@@ -14,6 +14,9 @@ public class Product : BaseEntity
 
     public decimal Price { get; set; }
 
+    // NEW
+    public int StockQuantity { get; set; }
+
     public decimal? DiscountPrice { get; set; }
 
     public string Unit { get; set; } = string.Empty;
