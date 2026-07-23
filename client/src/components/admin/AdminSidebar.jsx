@@ -3,6 +3,7 @@ import {
   FiGrid,
   FiBox,
   FiLayers,
+  FiArchive,
   FiShoppingBag,
   FiUsers,
   FiBarChart2,
@@ -25,6 +26,11 @@ const menuItems = [
     path: "/admin/categories",
   },
   {
+    name: "Inventory",
+    icon: <FiArchive />,
+    path: "/admin/inventory",
+  },
+  {
     name: "Orders",
     icon: <FiShoppingBag />,
     path: "/admin/orders",
@@ -44,7 +50,6 @@ const menuItems = [
 function AdminSidebar() {
   return (
     <aside className="w-64 bg-green-700 text-white min-h-screen p-6">
-
       <h1 className="text-3xl font-bold mb-10">
         FreshMarket
       </h1>
@@ -68,7 +73,6 @@ function AdminSidebar() {
           </NavLink>
         ))}
       </nav>
-
     </aside>
   );
 }

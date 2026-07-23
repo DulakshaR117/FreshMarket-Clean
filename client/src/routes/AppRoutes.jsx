@@ -29,6 +29,7 @@ import NotFound from "../pages/NotFound";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminProducts from "../pages/admin/AdminProducts";
 import AdminCategories from "../pages/admin/AdminCategories";
+import AdminInventory from "../pages/admin/AdminInventory";
 import AdminOrders from "../pages/admin/AdminOrders";
 import AdminCustomers from "../pages/admin/AdminCustomers";
 import AdminAnalytics from "../pages/admin/AdminAnalytics";
@@ -36,13 +37,11 @@ import AdminAnalytics from "../pages/admin/AdminAnalytics";
 function AppRoutes() {
   return (
     <Routes>
-
       {/* ==========================
           Customer Routes
       ========================== */}
 
       <Route element={<MainLayout />}>
-
         <Route path="/" element={<Home />} />
 
         <Route path="/products" element={<Products />} />
@@ -107,7 +106,6 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
-
       </Route>
 
       {/* ==========================
@@ -152,6 +150,11 @@ function AppRoutes() {
         />
 
         <Route
+          path="inventory"
+          element={<AdminInventory />}
+        />
+
+        <Route
           path="orders"
           element={<AdminOrders />}
         />
@@ -175,7 +178,6 @@ function AppRoutes() {
         path="*"
         element={<NotFound />}
       />
-
     </Routes>
   );
 }
